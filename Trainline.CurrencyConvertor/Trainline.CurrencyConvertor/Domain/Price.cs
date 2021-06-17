@@ -1,17 +1,25 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Trainline.CurrencyConvertor.Domain
 {
     [ImmutableObject(true)]
     public sealed class Price
     {
+        #region Constants
+
+        public static Price OnePound = new Price(Currency.GBP, 1);
+
+        #endregion
+
         public Price(Currency currency, decimal amount)
         {
-            Currency = currency;
+            Currency = currency ?? throw new ArgumentNullException(nameof(currency));
             Amount = amount;
         }
 
+        [NotNull]
         public Currency Currency { get; }
         public decimal Amount { get; }
 

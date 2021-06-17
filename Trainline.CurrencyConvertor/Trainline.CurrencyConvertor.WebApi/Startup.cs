@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trainline.CurrencyConvertor.Infrastructure;
 using Trainline.CurrencyConvertor.Services;
+using Trainline.CurrencyConvertor.WebApi.CurrencyConversion;
 
 namespace Trainline.CurrencyConvertor.WebApi
 {
@@ -36,7 +37,11 @@ namespace Trainline.CurrencyConvertor.WebApi
             });
 
             // application logic
+            services.AddTransient<ExchangeRateService.ExchangeRateServiceConfig>(
+                (sp) => ExchangeRateService.FromConfig(sp.GetService<IConfiguration>()
+                                                         .GetSection("Application:ExchangeRateService")));
             services.AddTransient<IExchangeRateProvider, ExchangeRateService>();
+            services.AddTransient<CurrencyConversionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

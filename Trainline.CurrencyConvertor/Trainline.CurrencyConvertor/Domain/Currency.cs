@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Trainline.CurrencyConvertor.Domain
 {
@@ -17,6 +18,7 @@ namespace Trainline.CurrencyConvertor.Domain
             CurrencyIso = currencyIso.ToUpperInvariant();
         }
 
+        [NotNull]
         public string CurrencyIso { get; }
 
         #region Constants
