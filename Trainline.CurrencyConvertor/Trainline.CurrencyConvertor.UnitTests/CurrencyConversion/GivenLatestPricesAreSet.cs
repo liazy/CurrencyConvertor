@@ -61,6 +61,7 @@ namespace Trainline.CurrencyConvertor.UnitTests.CurrencyConversion
             Assert.AreEqual(expectedAmount, actualPrice.Amount, "The incorrect amount was returned");
         }
 
+        [Ignore("Not implemented")]
         [TestCase("GBP")]
         [TestCase("EUR")]
         [TestCase("USD")]
