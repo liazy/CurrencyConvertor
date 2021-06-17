@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Trainline.CurrencyConvertor.Domain;
 
@@ -15,14 +14,12 @@ namespace Trainline.CurrencyConvertor.Services
             _exchangeRateProvider = exchangeRateProvider;
         }
 
-        public Price ConvertPrice(Price price, Currency targetCurrency)
+        public async Task<Price> ConvertPrice(Price price, Currency targetCurrency)
         {
-            var latestExchangeRates = _exchangeRateProvider.GetLatestExchangeRate(targetCurrency);
-            var exchangeRate = latestExchangeRates.FirstOrDefault(p=>p.Currency == targetCurrency);
+            var latestExchangeRates = await _exchangeRateProvider.GetLatestExchangeRates(targetCurrency);
+            var exchangeRate = latestExchangeRates.Prices.FirstOrDefault(p => p.Currency == targetCurrency);
             if (exchangeRate == null)
-            {
                 throw new ArgumentException("The target currency is not supported", nameof(targetCurrency));
-            }
 
             return new Price(exchangeRate.Currency, exchangeRate.Amount * price.Amount);
         }

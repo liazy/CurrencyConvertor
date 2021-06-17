@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Trainline.CurrencyConvertor.Infrastructure;
+using Trainline.CurrencyConvertor.Services;
 
 namespace Trainline.CurrencyConvertor.WebApi
 {
@@ -32,6 +34,9 @@ namespace Trainline.CurrencyConvertor.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Trainline.CurrencyConvertor.WebApi", Version = "v1" });
             });
+
+            // application logic
+            services.AddTransient<IExchangeRateProvider, ExchangeRateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using Trainline.CurrencyConvertor.Domain;
@@ -19,14 +20,14 @@ namespace Trainline.CurrencyConvertor.UnitTests.CurrencyConversion
         [SetUp]
         public void Setup()
         {
-            var testBed = new TestBedBuilder()
-                         .WithExchangeProvider(new ExchangeRateProviderMock(new List<Price>
-                          {
-                              new Price(Currency.GBP, GbpExchangeRate),
-                              new Price(Currency.EUR, EurExchangeRate),
-                              new Price(Currency.USD, UsdExchangeRate)
-                          }))
-                         .Build();
+            IServiceProvider testBed = new TestBedBuilder()
+                                      .WithExchangeProvider(new ExchangeRateProviderMock(new List<Price>
+                                       {
+                                           new Price(Currency.GBP, GbpExchangeRate),
+                                           new Price(Currency.EUR, EurExchangeRate),
+                                           new Price(Currency.USD, UsdExchangeRate)
+                                       }))
+                                      .Build();
             _conversionService = testBed.GetService<CurrencyConversionService>();
         }
 
@@ -35,11 +36,11 @@ namespace Trainline.CurrencyConvertor.UnitTests.CurrencyConversion
         [TestCase("GBP", 0)]
         [TestCase("GBP", 1.1543874)]
         [TestCase("GBP", -1.1874)]
-        public void WhenTheSourceAndTargetCurrencyMatch_ThenTheReturnedPriceShouldBeTheInputPrice(
+        public async Task WhenTheSourceAndTargetCurrencyMatch_ThenTheReturnedPriceShouldBeTheInputPrice(
             string currency, decimal value)
         {
-            var expectedPrice = new Price(new Currency(currency), value);
-            var actualPrice = _conversionService.ConvertPrice(expectedPrice, new Currency(currency));
+            Price expectedPrice = new Price(new Currency(currency), value);
+            Price actualPrice = await _conversionService.ConvertPrice(expectedPrice, new Currency(currency));
 
             Assert.AreEqual(expectedPrice, actualPrice, "Currency should not be converted but has changed.");
         }
@@ -49,13 +50,14 @@ namespace Trainline.CurrencyConvertor.UnitTests.CurrencyConversion
         [TestCase("GBP", (double) GbpExchangeRate)]
         [TestCase("EUR", (double) EurExchangeRate)]
         [TestCase("USD", (double) UsdExchangeRate)]
-        public void WhenTheSourceValueIs1_ThenTheReturnedPriceShouldMatchTheExchangeRate(
+        public async Task WhenTheSourceValueIs1_ThenTheReturnedPriceShouldMatchTheExchangeRate(
             string currency, decimal expectedAmount)
         {
-            var actualPrice =
-                _conversionService.ConvertPrice(new Price(new Currency("GBP"), 1), new Currency(currency));
+            Price actualPrice =
+                await _conversionService.ConvertPrice(new Price(new Currency("GBP"), 1), new Currency(currency));
 
-            Assert.AreEqual(new Currency(currency), actualPrice.Currency, "The incorrect currency was returned from the service.");
+            Assert.AreEqual(new Currency(currency), actualPrice.Currency,
+                            "The incorrect currency was returned from the service.");
             Assert.AreEqual(expectedAmount, actualPrice.Amount, "The incorrect amount was returned");
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Trainline.CurrencyConvertor.Domain;
 using Trainline.CurrencyConvertor.Services;
 
@@ -17,10 +18,9 @@ namespace Trainline.CurrencyConvertor.UnitTests.TestBed
             };
         }
 
-        public List<Price> GetLatestExchangeRate(Currency currency)
+        public Task<ExchangeRateInfo> GetLatestExchangeRates(Currency currency)
         {
-            // return a new list each time...
-            return _prices.ToList();
+            return Task.FromResult(new ExchangeRateInfo(_prices));
         }
     }
 }
