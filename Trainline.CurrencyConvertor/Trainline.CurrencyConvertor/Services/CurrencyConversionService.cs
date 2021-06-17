@@ -16,8 +16,8 @@ namespace Trainline.CurrencyConvertor.Services
 
         public async Task<Price> ConvertPrice(Price price, Currency targetCurrency)
         {
-            var latestExchangeRates = await _exchangeRateProvider.GetLatestExchangeRates(price.Currency);
-            var exchangeRate = latestExchangeRates.Prices.FirstOrDefault(p => p.Currency == targetCurrency);
+            ExchangeRateInfo latestExchangeRates = await _exchangeRateProvider.GetLatestExchangeRates(price.Currency);
+            Price exchangeRate = latestExchangeRates.Prices.FirstOrDefault(p => p.Currency == targetCurrency);
             if (exchangeRate == null)
                 throw new ArgumentException("The target currency is not supported", nameof(targetCurrency));
 

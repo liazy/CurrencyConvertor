@@ -21,7 +21,13 @@ namespace Trainline.CurrencyConvertor.Domain
 
         [NotNull]
         public Currency Currency { get; }
+
         public decimal Amount { get; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Currency)}: {Currency}, {nameof(Amount)}: {Amount}";
+        }
 
         #region Equality members
 
@@ -51,10 +57,5 @@ namespace Trainline.CurrencyConvertor.Domain
         }
 
         #endregion
-
-        public override string ToString()
-        {
-            return $"{nameof(Currency)}: {Currency}, {nameof(Amount)}: {Amount}";
-        }
     }
 }

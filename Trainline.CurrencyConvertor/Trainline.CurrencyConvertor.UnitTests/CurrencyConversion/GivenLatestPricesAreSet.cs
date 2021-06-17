@@ -39,7 +39,7 @@ namespace Trainline.CurrencyConvertor.UnitTests.CurrencyConversion
         public async Task WhenTheSourceAndTargetCurrencyMatch_ThenTheReturnedPriceShouldBeTheInputPrice(
             string currency, decimal value)
         {
-            Price expectedPrice = new Price(new Currency(currency), value);
+            var expectedPrice = new Price(new Currency(currency), value);
             Price actualPrice = await _conversionService.ConvertPrice(expectedPrice, new Currency(currency));
 
             Assert.AreEqual(expectedPrice, actualPrice, "Currency should not be converted but has changed.");

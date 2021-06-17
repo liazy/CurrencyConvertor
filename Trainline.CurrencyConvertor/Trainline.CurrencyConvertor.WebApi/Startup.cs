@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Trainline.CurrencyConvertor.Infrastructure;
 using Trainline.CurrencyConvertor.Services;
-using Trainline.CurrencyConvertor.WebApi.CurrencyConversion;
 
 namespace Trainline.CurrencyConvertor.WebApi
 {
@@ -29,17 +21,19 @@ namespace Trainline.CurrencyConvertor.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Trainline.CurrencyConvertor.WebApi", Version = "v1" });
+                c.SwaggerDoc(
+                    "v1",
+                    new OpenApiInfo
+                        {Title = "Trainline.CurrencyConvertor.WebApi", Version = "v1"});
             });
 
             // application logic
-            services.AddTransient<ExchangeRateService.ExchangeRateServiceConfig>(
-                (sp) => ExchangeRateService.FromConfig(sp.GetService<IConfiguration>()
-                                                         .GetSection("Application:ExchangeRateService")));
+            services.AddTransient(
+                sp => ExchangeRateService.FromConfig(sp.GetService<IConfiguration>()
+                                                       .GetSection("Application:ExchangeRateService")));
             services.AddTransient<IExchangeRateProvider, ExchangeRateService>();
             services.AddTransient<CurrencyConversionService>();
         }
@@ -51,7 +45,8 @@ namespace Trainline.CurrencyConvertor.WebApi
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trainline.CurrencyConvertor.WebApi v1"));
+                app.UseSwaggerUI(
+                    c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Trainline.CurrencyConvertor.WebApi v1"));
             }
 
             app.UseHttpsRedirection();
@@ -60,10 +55,7 @@ namespace Trainline.CurrencyConvertor.WebApi
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

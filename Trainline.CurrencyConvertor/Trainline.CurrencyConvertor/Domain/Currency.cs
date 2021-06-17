@@ -21,6 +21,11 @@ namespace Trainline.CurrencyConvertor.Domain
         [NotNull]
         public string CurrencyIso { get; }
 
+        public override string ToString()
+        {
+            return $"{nameof(CurrencyIso)}: {CurrencyIso}";
+        }
+
         #region Constants
 
         public static Currency GBP = new Currency("GBP");
@@ -57,10 +62,5 @@ namespace Trainline.CurrencyConvertor.Domain
         }
 
         #endregion
-
-        public override string ToString()
-        {
-            return $"{nameof(CurrencyIso)}: {CurrencyIso}";
-        }
     }
 }
