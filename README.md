@@ -26,7 +26,6 @@ The solution is functional but there are quite a few things that I would like to
    - Haven't set up a destination for the error logs or an Exception Filter
    - If something goes wrong the api consumer is going to get a generic 500 most of the time. The argument exceptions should be handled as 400 status code as they would be user error in this case.
      - More data annotaions would be the first thing to do here.
-     - ModelState.IsValid not implemented - I consider this boiler plate and usually abstract it to a global filter attribute.
    - I made up the logic on Currency ISOs being 3 chars so that needs checking and should present as a 400 error if an invalid format is provided.
  - Request format
    - The request format is not very friendly. I was really going for:
