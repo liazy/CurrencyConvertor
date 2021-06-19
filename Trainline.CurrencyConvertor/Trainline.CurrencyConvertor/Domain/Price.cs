@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Trainline.CurrencyConvertor.Domain
 {
-    [ImmutableObject(true)]
-    public sealed class Price
+    public sealed record Price
     {
         #region Constants
 
@@ -20,42 +20,15 @@ namespace Trainline.CurrencyConvertor.Domain
         }
 
         [NotNull]
+        [Required]
         public Currency Currency { get; }
 
+        [Required]
         public decimal Amount { get; }
 
         public override string ToString()
         {
             return $"{nameof(Currency)}: {Currency}, {nameof(Amount)}: {Amount}";
         }
-
-        #region Equality members
-
-        private bool Equals(Price other)
-        {
-            return Currency.Equals(other.Currency) && Amount == other.Amount;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return ReferenceEquals(this, obj) || obj is Price other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Currency, Amount);
-        }
-
-        public static bool operator ==(Price left, Price right)
-        {
-            return Equals(left, right);
-        }
-
-        public static bool operator !=(Price left, Price right)
-        {
-            return !Equals(left, right);
-        }
-
-        #endregion
     }
 }
